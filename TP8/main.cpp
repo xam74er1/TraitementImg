@@ -64,6 +64,8 @@ public:
 	void Face2();
 	void Face2BW();
 	void addCounter();
+	void setSeuil();
+	void seuillvl(wxCommandEvent& event);
 
 private:
     wxBitmap m_bitmap; // used to display the image
@@ -72,6 +74,7 @@ private:
     int m_whith;
     int m_height;
 	MyThread * m_theread;
+	int m_seuil = 0;
 	
 	unsigned long xd,yd,xf,yf;
 	bool drawRect = false;
@@ -225,9 +228,9 @@ void MyPanel::SeilOld(int seuil)
 {
     Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
     if(m_image) {
-	MyThresholdDialog* dlg = new MyThresholdDialog(this, -1, wxT("Threshold"), wxDefaultPosition, wxSize(250, 140));
-	dlg->ShowModal();
-	int m_seil = dlg->m_threshold->GetValue();
+	//MyThresholdDialog* dlg = new MyThresholdDialog(this, -1, wxT("Threshold"), wxDefaultPosition, wxSize(250, 140));
+	//dlg->ShowModal();
+	int m_seil = m_seuil;
 	m_image->Threshold(m_seil);
 	Refresh();
     }
@@ -236,23 +239,14 @@ void MyPanel::SeilOld(int seuil)
 void MyPanel::Seil(int seuil)
 {
     Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-	Bind(MON_EVENEMENT, &MyPanel::OnThresholdImage, this) ;
-	
+	std::cout << m_seuil << std::endl;
+
     if(m_image) {
-		
-		*img_save = (MyImage) m_image->Copy();
-	MyThresholdDialog* dlg = new MyThresholdDialog(this, -1, wxT("Threshold"), wxDefaultPosition, wxSize(250, 140));
-	int res = dlg->ShowModal();
-	
-	if(res!=wxID_OK){
-		//delete m_image;
-		*m_image = (MyImage) img_save->Copy();
-		
-			Refresh();
-	}
-	
-	Unbind(MON_EVENEMENT, &MyPanel::OnThresholdImage, this) ;
-	//delete img_save;
+	//MyThresholdDialog* dlg = new MyThresholdDialog(this, -1, wxT("Threshold"), wxDefaultPosition, wxSize(250, 140));
+	//dlg->ShowModal();
+	int m_seil = m_seuil;
+	m_image->Threshold(m_seil);
+	Refresh();
     }
 }
 
@@ -419,6 +413,22 @@ void MyPanel::Face2BW(){
     }
 }
 
+void MyPanel::setSeuil() {
+	Bind(MON_EVENEMENT, &MyPanel::seuillvl, this);
+	
+		MyThresholdDialog* dlg = new MyThresholdDialog(this, -1, wxT("Threshold"), wxDefaultPosition, wxSize(250, 140));
+		int res = dlg->ShowModal();
+		
+		if(res!=wxID_OK){
+		Unbind(MON_EVENEMENT, &MyPanel::OnThresholdImage, this);
+    }
+}
+
+void MyPanel::seuillvl(wxCommandEvent& event) {
+	m_seuil = event.GetInt();
+	//std::cout << m_seil << std::endl;
+}
+
 
 
 class MyFrame;
@@ -487,7 +497,8 @@ enum { // énumération. Elle gère la numérotation automatiquement
 	ID_LUMINA,
 	ID_TEST,
 	ID_FACE2,
-	ID_FACE2BW
+	ID_FACE2BW,
+	ID_SETSEUIL
 
 };
 IMPLEMENT_APP(MyApp);
@@ -567,32 +578,33 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuProcesse->Append(ID_NEGATIVE, wxT("Negative...\tCtrl-N"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_NEGATIVE);
 
-    menuProcesse->Append(ID_DESATURE, wxT("Desature...\tCtrl-D"));
-    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_DESATURE);
+	menuProcesse->Append(ID_DESATURE, wxT("Desature...\tCtrl-D"));
+	Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_DESATURE);
 
-    menuProcesse->Append(ID_SEIL, wxT("thresholding...\tCtrl-SE"));
-    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SEIL);
+	menuProcesse->Append(ID_SEIL, wxT("thresholding...\tCtrl-SE"));
+	Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SEIL);
 
-    menuProcesse->Append(ID_POSTERIZE, wxT("Posterize...\tCtrl-PO"));
-    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_POSTERIZE);
+	menuProcesse->Append(ID_POSTERIZE, wxT("Posterize...\tCtrl-PO"));
+	Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_POSTERIZE);
 	
 	
-    menuProcesse->Append(ID_CONTRAST, wxT("Contraste...\tCtrl-PE"));
-    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_CONTRAST);
+	menuProcesse->Append(ID_CONTRAST, wxT("Contraste...\tCtrl-PE"));
+	Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_CONTRAST);
 	
 	menuProcesse->Append(ID_LUMINA, wxT("Luminosite..\tCtrl-PE"));
-    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_LUMINA);
+	Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_LUMINA);
 	
 	menuProcesse->Append(ID_TEST, wxT("TEST..\tCtrl-Y"));
-    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_TEST);
+	Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_TEST);
 	
 	menuProcesse->Append(ID_FACE2, wxT("Face Detection ..\tCtrl-F"));
-    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_FACE2);
+	Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_FACE2);
 	
 	menuProcesse->Append(ID_FACE2BW, wxT("Face Detection black and white ..\tCtrl-FBW"));
-    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_FACE2BW);
+	Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_FACE2BW);
 	
-	
+	menuProcesse->Append(ID_SETSEUIL, wxT("Curseur Threshold ..\tCtrl-FBW"));
+	Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SETSEUIL);
 	
 	
 	wxMenu* menuCalcule= new wxMenu;
@@ -695,8 +707,11 @@ void MyFrame::OnSave(wxCommandEvent& event)
 
 void MyFrame::OnProcessImage(wxCommandEvent& event)
 {
-	
-	id = event.GetId();
+	if (event.GetId() == ID_SETSEUIL) {
+		m_panel->setSeuil();
+	} else {
+		id = event.GetId();
+	}
 //    switch(event.GetId()) {
 //   case ID_ROTATION_P90:
 //	m_panel->Rotate(true);

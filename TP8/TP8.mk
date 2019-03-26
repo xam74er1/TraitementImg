@@ -5,22 +5,22 @@
 ## Debug
 ProjectName            :=TP8
 ConfigurationName      :=Debug
-WorkspacePath          :="/users/info/etu-s4/clercma/Documents/Hello World"
-ProjectPath            :="/users/info/etu-s4/clercma/Documents/Hello World/TP8"
+WorkspacePath          :=/users/info/etu-s4/bassetlu/Projet
+ProjectPath            :=/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8
 IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
-User                   :=CLERC Max
+User                   :=BASSET Lucas
 Date                   :=26/03/19
-CodeLitePath           :=/users/info/etu-s4/clercma/.codelite
-LinkerName             :=g++
-SharedObjectLinkerName :=g++ -shared -fPIC
+CodeLitePath           :=/users/info/etu-s4/bassetlu/.codelite
+LinkerName             :=/usr/bin/g++
+SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
-PreprocessSuffix       :=.o.i
-DebugSwitch            :=-gstab
+PreprocessSuffix       :=.i
+DebugSwitch            :=-g 
 IncludeSwitch          :=-I
 LibrarySwitch          :=-l
 OutputSwitch           :=-o 
@@ -31,7 +31,7 @@ OutputFile             :=$(IntermediateDirectory)/$(ProjectName)
 Preprocessors          :=
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
-PreprocessOnlySwitch   :=-E 
+PreprocessOnlySwitch   :=-E
 ObjectsFileList        :="TP8.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
@@ -47,20 +47,20 @@ LibPath                := $(LibraryPathSwitch).
 ## Common variables
 ## AR, CXX, CC, AS, CXXFLAGS and CFLAGS can be overriden using an environment variables
 ##
-AR       := ar rcus
-CXX      := g++
-CC       := gcc
+AR       := /usr/bin/ar rcu
+CXX      := /usr/bin/g++
+CC       := /usr/bin/gcc
 CXXFLAGS :=  -g -O0 -Wall $(shell wx-config --cxxflags --unicode=yes  ) `pkg-config --cflags opencv` $(Preprocessors)
 CFLAGS   :=  -g -O0 -Wall $(shell wx-config --cxxflags --unicode=yes  ) $(Preprocessors)
 ASFLAGS  := 
-AS       := as
+AS       := /usr/bin/as
 
 
 ##
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix) $(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix) 
 
 
 
@@ -92,52 +92,52 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/clercma/Documents/Hello World/TP8/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM main.cpp
 
 $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
 
-$(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix): MyThresholdDialog.cpp $(IntermediateDirectory)/MyThresholdDialog.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/clercma/Documents/Hello World/TP8/MyThresholdDialog.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/MyThresholdDialog.cpp$(DependSuffix): MyThresholdDialog.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/MyThresholdDialog.cpp$(DependSuffix) -MM MyThresholdDialog.cpp
-
-$(IntermediateDirectory)/MyThresholdDialog.cpp$(PreprocessSuffix): MyThresholdDialog.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyThresholdDialog.cpp$(PreprocessSuffix) MyThresholdDialog.cpp
-
 $(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix): opencv_bridge.cpp $(IntermediateDirectory)/opencv_bridge.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/clercma/Documents/Hello World/TP8/opencv_bridge.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/opencv_bridge.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/opencv_bridge.cpp$(DependSuffix): opencv_bridge.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/opencv_bridge.cpp$(DependSuffix) -MM opencv_bridge.cpp
 
 $(IntermediateDirectory)/opencv_bridge.cpp$(PreprocessSuffix): opencv_bridge.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/opencv_bridge.cpp$(PreprocessSuffix) opencv_bridge.cpp
 
+$(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix): MyThresholdDialog.cpp $(IntermediateDirectory)/MyThresholdDialog.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/MyThresholdDialog.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/MyThresholdDialog.cpp$(DependSuffix): MyThresholdDialog.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/MyThresholdDialog.cpp$(DependSuffix) -MM MyThresholdDialog.cpp
+
+$(IntermediateDirectory)/MyThresholdDialog.cpp$(PreprocessSuffix): MyThresholdDialog.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyThresholdDialog.cpp$(PreprocessSuffix) MyThresholdDialog.cpp
+
 $(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix): MyRotateDialog.cpp $(IntermediateDirectory)/MyRotateDialog.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/clercma/Documents/Hello World/TP8/MyRotateDialog.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/MyRotateDialog.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/MyRotateDialog.cpp$(DependSuffix): MyRotateDialog.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/MyRotateDialog.cpp$(DependSuffix) -MM MyRotateDialog.cpp
 
 $(IntermediateDirectory)/MyRotateDialog.cpp$(PreprocessSuffix): MyRotateDialog.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyRotateDialog.cpp$(PreprocessSuffix) MyRotateDialog.cpp
 
-$(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix): MyImage.cpp $(IntermediateDirectory)/MyImage.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/clercma/Documents/Hello World/TP8/MyImage.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/MyImage.cpp$(DependSuffix): MyImage.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/MyImage.cpp$(DependSuffix) -MM MyImage.cpp
-
-$(IntermediateDirectory)/MyImage.cpp$(PreprocessSuffix): MyImage.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyImage.cpp$(PreprocessSuffix) MyImage.cpp
-
 $(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix): MyHistogram.cpp $(IntermediateDirectory)/MyHistogram.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/clercma/Documents/Hello World/TP8/MyHistogram.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/MyHistogram.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/MyHistogram.cpp$(DependSuffix): MyHistogram.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/MyHistogram.cpp$(DependSuffix) -MM MyHistogram.cpp
 
 $(IntermediateDirectory)/MyHistogram.cpp$(PreprocessSuffix): MyHistogram.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyHistogram.cpp$(PreprocessSuffix) MyHistogram.cpp
+
+$(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix): MyImage.cpp $(IntermediateDirectory)/MyImage.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/MyImage.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/MyImage.cpp$(DependSuffix): MyImage.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/MyImage.cpp$(DependSuffix) -MM MyImage.cpp
+
+$(IntermediateDirectory)/MyImage.cpp$(PreprocessSuffix): MyImage.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyImage.cpp$(PreprocessSuffix) MyImage.cpp
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
