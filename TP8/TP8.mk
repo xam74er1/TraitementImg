@@ -5,7 +5,7 @@
 ## Debug
 ProjectName            :=TP8
 ConfigurationName      :=Debug
-WorkspacePath          :=/users/info/etu-s4/bassetlu/Projet
+WorkspacePath          :=/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8
 ProjectPath            :=/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8
 IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
@@ -13,10 +13,10 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=BASSET Lucas
-Date                   :=26/03/19
+Date                   :=01/04/19
 CodeLitePath           :=/users/info/etu-s4/bassetlu/.codelite
-LinkerName             :=/usr/bin/g++
-SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
+LinkerName             :=/usr/bin/x86_64-linux-gnu-g++
+SharedObjectLinkerName :=/usr/bin/x86_64-linux-gnu-g++ -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
 PreprocessSuffix       :=.i
@@ -35,32 +35,32 @@ PreprocessOnlySwitch   :=-E
 ObjectsFileList        :="TP8.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
-LinkOptions            :=  $(shell wx-config   --libs --unicode=yes) `pkg-config --libs opencv`
-IncludePath            :=  $(IncludeSwitch). 
+LinkOptions            :=  -O0
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). 
 IncludePCH             := 
 RcIncludePath          := 
 Libs                   := 
 ArLibs                 :=  
-LibPath                := $(LibraryPathSwitch). 
+LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch). $(LibraryPathSwitch)Debug 
 
 ##
 ## Common variables
 ## AR, CXX, CC, AS, CXXFLAGS and CFLAGS can be overriden using an environment variables
 ##
-AR       := /usr/bin/ar rcu
-CXX      := /usr/bin/g++
-CC       := /usr/bin/gcc
-CXXFLAGS :=  -g -O0 -Wall $(shell wx-config --cxxflags --unicode=yes  ) `pkg-config --cflags opencv` $(Preprocessors)
-CFLAGS   :=  -g -O0 -Wall $(shell wx-config --cxxflags --unicode=yes  ) $(Preprocessors)
+AR       := /usr/bin/x86_64-linux-gnu-ar rcu
+CXX      := /usr/bin/x86_64-linux-gnu-g++
+CC       := /usr/bin/x86_64-linux-gnu-gcc
+CXXFLAGS :=  -g -Wall $(Preprocessors)
+CFLAGS   :=   $(Preprocessors)
 ASFLAGS  := 
-AS       := /usr/bin/as
+AS       := /usr/bin/x86_64-linux-gnu-as
 
 
 ##
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix) $(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) $(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix) 
 
 
 
@@ -99,14 +99,6 @@ $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
 
-$(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix): opencv_bridge.cpp $(IntermediateDirectory)/opencv_bridge.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/opencv_bridge.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/opencv_bridge.cpp$(DependSuffix): opencv_bridge.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/opencv_bridge.cpp$(DependSuffix) -MM opencv_bridge.cpp
-
-$(IntermediateDirectory)/opencv_bridge.cpp$(PreprocessSuffix): opencv_bridge.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/opencv_bridge.cpp$(PreprocessSuffix) opencv_bridge.cpp
-
 $(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix): MyThresholdDialog.cpp $(IntermediateDirectory)/MyThresholdDialog.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/MyThresholdDialog.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyThresholdDialog.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/MyThresholdDialog.cpp$(DependSuffix): MyThresholdDialog.cpp
@@ -115,13 +107,13 @@ $(IntermediateDirectory)/MyThresholdDialog.cpp$(DependSuffix): MyThresholdDialog
 $(IntermediateDirectory)/MyThresholdDialog.cpp$(PreprocessSuffix): MyThresholdDialog.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyThresholdDialog.cpp$(PreprocessSuffix) MyThresholdDialog.cpp
 
-$(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix): MyRotateDialog.cpp $(IntermediateDirectory)/MyRotateDialog.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/MyRotateDialog.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/MyRotateDialog.cpp$(DependSuffix): MyRotateDialog.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/MyRotateDialog.cpp$(DependSuffix) -MM MyRotateDialog.cpp
+$(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix): opencv_bridge.cpp $(IntermediateDirectory)/opencv_bridge.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/opencv_bridge.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/opencv_bridge.cpp$(DependSuffix): opencv_bridge.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/opencv_bridge.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/opencv_bridge.cpp$(DependSuffix) -MM opencv_bridge.cpp
 
-$(IntermediateDirectory)/MyRotateDialog.cpp$(PreprocessSuffix): MyRotateDialog.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyRotateDialog.cpp$(PreprocessSuffix) MyRotateDialog.cpp
+$(IntermediateDirectory)/opencv_bridge.cpp$(PreprocessSuffix): opencv_bridge.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/opencv_bridge.cpp$(PreprocessSuffix) opencv_bridge.cpp
 
 $(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix): MyHistogram.cpp $(IntermediateDirectory)/MyHistogram.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/MyHistogram.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyHistogram.cpp$(ObjectSuffix) $(IncludePath)
@@ -130,6 +122,14 @@ $(IntermediateDirectory)/MyHistogram.cpp$(DependSuffix): MyHistogram.cpp
 
 $(IntermediateDirectory)/MyHistogram.cpp$(PreprocessSuffix): MyHistogram.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyHistogram.cpp$(PreprocessSuffix) MyHistogram.cpp
+
+$(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix): MyRotateDialog.cpp $(IntermediateDirectory)/MyRotateDialog.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/MyRotateDialog.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/MyRotateDialog.cpp$(DependSuffix): MyRotateDialog.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/MyRotateDialog.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/MyRotateDialog.cpp$(DependSuffix) -MM MyRotateDialog.cpp
+
+$(IntermediateDirectory)/MyRotateDialog.cpp$(PreprocessSuffix): MyRotateDialog.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MyRotateDialog.cpp$(PreprocessSuffix) MyRotateDialog.cpp
 
 $(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix): MyImage.cpp $(IntermediateDirectory)/MyImage.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "/users/info/etu-s4/bassetlu/M4105C/TraitementImg/TP8/MyImage.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/MyImage.cpp$(ObjectSuffix) $(IncludePath)
