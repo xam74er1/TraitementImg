@@ -1,1 +1,5 @@
 this is a test
+
+compiler : -g;-O0;-Wall;$(shell wx-config --cxxflags --unicode=yes  );`pkg-config --cflags opencv`
+
+linker : $(shell wx-config   --libs --unicode=yes);`pkg-config --libs opencv`
