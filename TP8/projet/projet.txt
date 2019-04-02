@@ -1,0 +1,1 @@
+./Debug/up_main.cpp.o ./Debug/up_opencv_bridge.cpp.o ./Debug/up_MyHistogram.cpp.o ./Debug/up_MyRotateDialog.cpp.o ./Debug/up_MyImage.cpp.o ./Debug/up_MyThresholdDialog.cpp.o
