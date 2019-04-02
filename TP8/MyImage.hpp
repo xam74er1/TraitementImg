@@ -60,6 +60,9 @@ void FollowOneFaceV2BlackAndWhite(unsigned long &xd, unsigned long &yd,unsigned 
 void FollowOneFaceV3(unsigned long &xd, unsigned long &yd,unsigned long &xf, unsigned long &yf ,bool calc = true);
 void testOpenCv();
 void testOpenCv2();
+void fusionTest(int dilation_size);
+void erodeTest(int dilation_size);
+void matToBuffer(cv::Mat mat, unsigned char * buffer);
 	~MyImage();
 private :
 void permute(unsigned char &a,unsigned char &b);

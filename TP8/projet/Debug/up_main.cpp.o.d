@@ -1,4 +1,4 @@
-Debug/up_main.cpp.o: ../main.cpp /usr/include/wx-3.0/wx/thread.h \
+Debug/up_main.cpp.o: ../main.cpp /usr/include/wx-3.0/wx/wxprec.h \
  /usr/include/wx-3.0/wx/defs.h /usr/include/wx-3.0/wx/platform.h \
  /usr/include/wx-3.0/wx/compiler.h \
  /usr/lib/x86_64-linux-gnu/wx/include/gtk2-unicode-3.0/wx/setup.h \
@@ -7,7 +7,7 @@ Debug/up_main.cpp.o: ../main.cpp /usr/include/wx-3.0/wx/thread.h \
  /usr/include/wx-3.0/wx/cpp.h /usr/include/wx-3.0/wx/dlimpexp.h \
  /usr/include/wx-3.0/wx/debug.h /usr/include/wx-3.0/wx/chartype.h \
  /usr/include/wx-3.0/wx/windowid.h /usr/include/wx-3.0/wx/features.h \
- /usr/include/wx-3.0/wx/wxprec.h ../MyHistogram.hpp ../MyImage.hpp \
+ /usr/include/wx-3.0/wx/thread.h ../MyHistogram.hpp ../MyImage.hpp \
  /usr/include/wx-3.0/wx/wx.h /usr/include/wx-3.0/wx/object.h \
  /usr/include/wx-3.0/wx/memory.h /usr/include/wx-3.0/wx/string.h \
  /usr/include/wx-3.0/wx/wxcrtbase.h /usr/include/wx-3.0/wx/strvararg.h \
@@ -124,9 +124,9 @@ Debug/up_main.cpp.o: ../main.cpp /usr/include/wx-3.0/wx/thread.h \
  /usr/include/wx-3.0/wx/gtk/filedlg.h \
  /usr/include/wx-3.0/wx/gtk/filectrl.h /usr/include/wx-3.0/wx/filectrl.h \
  /usr/include/wx-3.0/wx/mdi.h /usr/include/wx-3.0/wx/gtk/mdi.h \
- ../MyRotateDialog.hpp ../MyThresholdDialog.hpp ../opencv_bridge.h
+ ../opencv_bridge.h ../MyRotateDialog.hpp ../MyThresholdDialog.hpp
 
-/usr/include/wx-3.0/wx/thread.h:
+/usr/include/wx-3.0/wx/wxprec.h:
 
 /usr/include/wx-3.0/wx/defs.h:
 
@@ -156,7 +156,7 @@ Debug/up_main.cpp.o: ../main.cpp /usr/include/wx-3.0/wx/thread.h \
 
 /usr/include/wx-3.0/wx/features.h:
 
-/usr/include/wx-3.0/wx/wxprec.h:
+/usr/include/wx-3.0/wx/thread.h:
 
 ../MyHistogram.hpp:
 
@@ -580,8 +580,8 @@ Debug/up_main.cpp.o: ../main.cpp /usr/include/wx-3.0/wx/thread.h \
 
 /usr/include/wx-3.0/wx/gtk/mdi.h:
 
+../opencv_bridge.h:
+
 ../MyRotateDialog.hpp:
 
 ../MyThresholdDialog.hpp:
-
-../opencv_bridge.h:

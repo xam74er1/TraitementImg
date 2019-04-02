@@ -887,6 +887,63 @@ void MyImage::testOpenCv2(){
 	
 }
 
+///////////////////////////////////////////////////////////////////////////////
+void MyImage::fusionTest(int dilation_size) {
+	unsigned long xd ,yd,xf,yf;
+	
+	//FollowOneFaceV3(xd,yd,xf,yf,false);
+	unsigned long sx = this->GetWidth(); 
+	unsigned long sy = this->GetHeight(); 
+	unsigned char * tmp = this->GetData();
+	
+	cv::Mat m_mat = cv::Mat(cvSize(sx,sy),CV_8UC3,tmp);
+	cv::Mat dest;
+	int dilation_type;
+	int dilation_elem = 2;
+	
+	if( dilation_elem == 0 ){ dilation_type = MORPH_RECT; }
+	else if( dilation_elem == 1 ){ dilation_type = MORPH_CROSS; }
+	else if( dilation_elem == 2) { dilation_type = MORPH_ELLIPSE; }
+
+	cv::Mat element = getStructuringElement( dilation_type,
+                                       cvSize( 2*dilation_size + 1, 2*dilation_size+1 ),
+                                       Point( dilation_size, dilation_size ) );
+  /// Apply the dilation operation
+  dilate(m_mat, m_mat, element);
+  
+  //fin du traitement 
+	
+	this->SetData(m_mat.data,true);
+}
+
+void MyImage::erodeTest(int dilation_size) {
+	unsigned long xd ,yd,xf,yf;
+	
+	//FollowOneFaceV3(xd,yd,xf,yf,false);
+	unsigned long sx = this->GetWidth(); 
+	unsigned long sy = this->GetHeight(); 
+	unsigned char * tmp = this->GetData();
+	
+	cv::Mat m_mat = cv::Mat(cvSize(sx,sy),CV_8UC3,tmp);
+	cv::Mat dest;
+	int dilation_type;
+	int dilation_elem = 2;
+	
+	if( dilation_elem == 0 ){ dilation_type = MORPH_RECT; }
+	else if( dilation_elem == 1 ){ dilation_type = MORPH_CROSS; }
+	else if( dilation_elem == 2) { dilation_type = MORPH_ELLIPSE; }
+
+	cv::Mat element = getStructuringElement( dilation_type,
+                                       cvSize( 2*dilation_size + 1, 2*dilation_size+1 ),
+                                       Point( dilation_size, dilation_size ) );
+  /// Apply the dilation operation
+  erode(m_mat, m_mat, element);
+  
+  //fin du traitement 
+	
+	this->SetData(m_mat.data,true);
+}
+///////////////////////////////////////////////////////////////////////////////
 
 void MyImage::testOpenCv(){
 	
@@ -926,4 +983,13 @@ void MyImage::testOpenCv(){
 	unsigned char * buf = (unsigned char *) malloc(img->height*img->width*3);
 	IplImageToBuffer(img,buf);
 	this->SetData(buf);
+}
+
+void MyImage::matToBuffer(cv::Mat mat, unsigned char * buffer) {
+	int rowSize = mat.step;
+	unsigned char * rowAddress = mat.data;
+	for ( int y = 0; y < mat.rows; y++) {
+		memcpy(buffer + y * rowSize, rowAddress, rowSize);
+		rowAddress += mat.step;
+	}
 }
