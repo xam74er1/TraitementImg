@@ -3,8 +3,9 @@
 #include <iostream>
 #include <stdio.h>
 
-#include <wx/thread.h>
 #include <wx/wxprec.h>
+#include <wx/thread.h>
+
 
 #ifndef WX_PRECOMP
 #include "MyHistogram.hpp"
@@ -14,7 +15,10 @@
 #include <iostream>
 #include <stdio.h>
 #include <wx/wx.h>
+#include "MyHistogram.hpp"
 
+#include <opencv/cv.h>
+#include <opencv/highgui.h>	// one of the OpenCV libraries
 #include "opencv_bridge.h"
 #include <opencv/cv.h>
 #include <opencv/highgui.h> // one of the OpenCV libraries
@@ -22,8 +26,8 @@
 #endif
 wxDEFINE_EVENT(MON_EVENEMENT, wxCommandEvent);
 
-wxDECLARE_EVENT(MY_THREAD_EVENT, wxCommandEvent);
-wxDEFINE_EVENT(MY_THREAD_EVENT, wxCommandEvent);
+wxDECLARE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ;  
+wxDEFINE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ; 
 
 using namespace std;
 
@@ -37,7 +41,7 @@ public:
 class MyPanel : public wxPanel
 {
 public:
-    MyPanel(wxWindow* parent, MyThread* thread = nullptr);
+    MyPanel(wxWindow* parent,MyThread * thread = nullptr);
     ~MyPanel();
     void OpenImage(wxString fileName);
     void SaveImage(wxString fileName);
@@ -48,28 +52,32 @@ public:
     void Negative();
     void Desature();
     void Seil(int seuil);
-    void OnThresholdImage(wxCommandEvent& event);
-    void OnLumina(wxCommandEvent& event);
-    void SeilOld(int seuil);
+	void OnThresholdImage(wxCommandEvent& event);
+	void OnLumina(wxCommandEvent& event);
+	void SeilOld(int seuil);
     void posterize();
     void count_histogram();
     void enhenceContrast();
     int getM_Whith();
     int getM_Height();
-    void Lunina();
-    void drawImage(MyImage* data, int id = -1);
-    void aplyEffect(int id);
-    void test();
-    void Face2();
-    void Face2BW();
-    void addCounter();
-    void setSeuil();
-    void seuillvl(wxCommandEvent& event);
+	void Lunina();
+	void drawImage(MyImage * data,int id =-1);
+	void aplyEffect(int id);
+	void test();
+	void Face2();
+	void Face2BW();
+	void Face3BW();
+	void addCounter();
+	void ConvertiToOpenCV();
+	void ouvertureOpenCV();
+	void ConvertireToWxWiget();
+	void setSeuil();
+	void seuillvl(wxCommandEvent& event);
 
 private:
     wxBitmap m_bitmap; // used to display the image
     MyImage* m_image;  // used to load and process the image
-    MyImage* img_save; // used to load and process the image
+	 MyImage* img_save;  // used to load and process the image
     int m_whith;
     int m_height;
     MyThread* m_theread;
@@ -84,6 +92,7 @@ MyPanel::MyPanel(wxWindow* parent, MyThread* thread)
     : wxPanel(parent)
     , m_theread(thread)
 {
+	
 }
 
 void MyPanel::addCounter()
@@ -127,6 +136,7 @@ void MyPanel::OnPaint(wxPaintEvent& WXUNUSED(event))
 	dc.SetPen(wxPen(wxColor(255, 0, 0), 5)); // 10-pixels-thick pink outline
 	dc.DrawRectangle(xd, yd, (xf - xd), (yf - yd));
 	drawRect = false;
+	
 	}
 
 	if(m_image) {
@@ -200,6 +210,7 @@ void MyPanel::Rotate(bool rotation)
     }
 }
 
+
 void MyPanel::Negative()
 {
     Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
@@ -219,6 +230,7 @@ void MyPanel::Desature()
 	Refresh();
     }
 }
+
 
 void MyPanel::SeilOld(int seuil)
 {
@@ -259,6 +271,8 @@ void MyPanel::OnThresholdImage(wxCommandEvent& event)
     m_image->Threshold(m_seil);
     Refresh();
 }
+
+
 
 void MyPanel::Lunina()
 {
@@ -328,27 +342,27 @@ void MyPanel::enhenceContrast()
     }
 }
 
-void MyPanel::drawImage(MyImage* data, int id)
-{
-    Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-
-    // if(!m_image){
-
-    //}
-
-    m_image = data;
-
-    int m_height = m_image->GetHeight();
-    int m_whith = m_image->GetWidth();
+void MyPanel::drawImage(MyImage *data,int id ){
+	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
+	
+	//if(!m_image){
+		
+	//}
+	
+	m_image = data;
+	
+	int  m_height = m_image->GetHeight();
+   int m_whith = m_image->GetWidth();
     GetParent()->SetSize(m_whith, m_height + 10);
 
     this->SetSize(m_whith, m_height);
-
-    if(id != -1) {
-	aplyEffect(id);
-    } else {
-	Refresh();
-    }
+	
+	if(id!=-1){
+		aplyEffect(id);
+	}else{
+		Refresh();
+	}
+	
 }
 
 void MyPanel::test()
@@ -360,44 +374,58 @@ void MyPanel::test()
     int mouseY = pt.y - this->GetScreenPosition().y;
 
     if(m_image) {
-
-	m_image->colorAtPostion(mouseX, mouseY);
-	Refresh();
-    }
-}
-
-void MyPanel::Face2()
-{
-    Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-
-    drawRect = true;
-
-    if(m_image) {
-
-	m_image->FollowOneFaceV2(xd, yd, xf, yf);
-
-	// cout<<" xd "<<xd<<" yd "<<yd<<endl;
+		
+		m_image->testOpenCv2();
 
 	Refresh();
     }
 }
 
-void MyPanel::Face2BW()
-{
-    Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
+void MyPanel::Face2(){
+	  Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
+	  
 
-    drawRect = true;
-    bool direct = false;
-    bool needFind = (counter % 10 == 0) || direct;
-
+		drawRect = true;
+	
     if(m_image) {
 
-	m_image->FollowOneFaceV2BlackAndWhite(xd, yd, xf, yf, needFind);
-
-	// cout<<" xd "<<xd<<" yd "<<yd<<endl;
-
+	m_image->FollowOneFaceV2(xd,yd,xf,yf);
+	
+	//cout<<" xd "<<xd<<" yd "<<yd<<endl;
+	
 	Refresh();
+
+	
+	
     }
+}
+
+void MyPanel::Face2BW(){
+	  Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
+	  
+
+		drawRect = true;
+		bool direct = false;
+		bool needFind = (counter%10==0)||direct;
+
+		
+	
+    if(m_image) {
+
+	m_image->FollowOneFaceV2BlackAndWhite(xd,yd,xf,yf,needFind);
+	
+	//cout<<" xd "<<xd<<" yd "<<yd<<endl;
+	
+	Refresh();
+	
+    }
+}
+
+
+void MyPanel::seuillvl(wxCommandEvent& event)
+{
+    m_seuil = event.GetInt();
+    // std::cout << m_seil << std::endl;
 }
 
 void MyPanel::setSeuil()
@@ -412,11 +440,7 @@ void MyPanel::setSeuil()
     }
 }
 
-void MyPanel::seuillvl(wxCommandEvent& event)
-{
-    m_seuil = event.GetInt();
-    // std::cout << m_seil << std::endl;
-}
+
 
 class MyFrame;
 
@@ -434,6 +458,8 @@ private:
     int key = 0;
     unsigned char* buffer;
 };
+
+
 
 class MyFrame : public wxFrame
 {
@@ -460,6 +486,9 @@ private:
     int id = -1;
     bool onoffStatus = false;
 };
+
+
+
 
 enum { // énumération. Elle gère la numérotation automatiquement
     ID_Hello = 1,
@@ -500,6 +529,8 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame(NULL, wxID_ANY, title, pos, size)
 {
+
+    
 
     wxMenu* menuFile = new wxMenu;
     menuFile->Append(ID_Hello, wxT("Hello...\tCtrl-H"), _T("Show about dialog"));
@@ -605,9 +636,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuBar->Append(menuHelp, wxT("Help"));
     menuBar->Append(menuResize, wxT("Resize"));
     menuBar->Append(menuImage, wxT("Image"));
-    menuBar->Append(menuProcessImage, wxT("Process Image"));
     menuBar->Append(menuProcesse, wxT("Processe"));
-    menuBar->Append(menuCalcule, wxT("Calcule"));
+	menuBar->Append(menuCalcule, wxT("Calcule"));
 
     SetMenuBar(menuBar);
 
@@ -619,13 +649,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     this->CenterOnScreen();
 
     //-------Theread------
-    Bind(MY_THREAD_EVENT, &MyFrame::OnSetCounter, this);
-    m_thread = new MyThread(this);
-    m_thread->Create();
-    m_thread->Run();
-    onoffStatus = true;
-
-    m_panel = new MyPanel(this, m_thread);
+	Bind(MY_THREAD_EVENT, &MyFrame::OnSetCounter, this) ;
+	m_thread = new MyThread(this) ;
+	m_thread->Create();
+	m_thread->Run();
+	
+	m_panel = new MyPanel(this,m_thread);
 }
 void MyFrame::OnHello(wxCommandEvent& event)
 {
@@ -819,7 +848,7 @@ void MyPanel::aplyEffect(int id)
 	break;
     case ID_ROTATION_M180:
 	Rotate(false);
-	Rotate(false);
+	 Rotate(false);
 	break;
     case ID_MIROR_H:
 	Mirror(true);

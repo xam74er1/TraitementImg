@@ -122,7 +122,8 @@ Debug/MyImage.cpp.o: MyImage.cpp MyImage.hpp \
  /usr/include/wx-3.0/wx/valtext.h /usr/include/wx-3.0/wx/filedlg.h \
  /usr/include/wx-3.0/wx/gtk/filedlg.h \
  /usr/include/wx-3.0/wx/gtk/filectrl.h /usr/include/wx-3.0/wx/filectrl.h \
- /usr/include/wx-3.0/wx/mdi.h /usr/include/wx-3.0/wx/gtk/mdi.h
+ /usr/include/wx-3.0/wx/mdi.h /usr/include/wx-3.0/wx/gtk/mdi.h \
+ opencv_bridge.h
 
 MyImage.hpp:
 
@@ -575,3 +576,5 @@ MyImage.hpp:
 /usr/include/wx-3.0/wx/mdi.h:
 
 /usr/include/wx-3.0/wx/gtk/mdi.h:
+
+opencv_bridge.h:

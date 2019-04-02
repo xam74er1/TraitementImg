@@ -2,6 +2,7 @@
 #include <math.h> 
 
 using namespace std;
+using namespace cv;
 
 MyImage::MyImage(const wxString& fileName)
     : wxImage(fileName)
@@ -754,12 +755,15 @@ void MyImage::FollowOneFaceV2BlackAndWhite(unsigned long &xd, unsigned long &yd,
 
 }
 
-//ttraitment morpholgique 
+//ttraitment morpholgique : tuto : https://codes-sources.commentcamarche.net/source/view/40531/1080357#browser  
+//vers la ligne 329
 //dilatation + erotion   = ouverture 
 
 //Tuto pour letitage : https://openclassrooms.com/forum/sujet/etiquetage-en-composantes-connexes?page=1
 
 //etiqctage 
+
+//idee : passe sur un traitement oppen cv , avec un image 
 
 void MyImage::FollowOneFaceV3(unsigned long &xd, unsigned long &yd,unsigned long &xf, unsigned long &yf,bool calc){
 	
@@ -847,4 +851,79 @@ void MyImage::FollowOneFaceV3(unsigned long &xd, unsigned long &yd,unsigned long
 	}
 	}
 
+}
+//https://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
+//https://docs.opencv.org/2.4.13.7/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html
+void MyImage::testOpenCv2(){
+	
+	unsigned long xd ,yd,xf,yf;
+	
+	//FollowOneFaceV3(xd,yd,xf,yf,false);
+	unsigned long sx = this->GetWidth(); 
+		unsigned long sy = this->GetHeight(); 
+		unsigned char * tmp = this->GetData();
+		
+		
+		cv::Mat m_mat = cv::Mat(cvSize ( sx,sy),CV_8UC3,tmp);
+		cv::Mat dest;
+		
+		int dilation_type;
+		float dilation_size = 5;
+		int dilation_elem = 2;
+		
+  if( dilation_elem == 0 ){ dilation_type = MORPH_RECT; }
+  else if( dilation_elem == 1 ){ dilation_type = MORPH_CROSS; }
+  else if( dilation_elem == 2) { dilation_type = MORPH_ELLIPSE; }
+
+  cv::Mat element = getStructuringElement( dilation_type,
+                                       cvSize( 2*dilation_size + 1, 2*dilation_size+1 ),
+                                       Point( dilation_size, dilation_size ) );
+  /// Apply the dilation operation
+  dilate( m_mat, m_mat, element );
+  
+  //fin du traitement 
+	
+	this->SetData(m_mat.data,true);
+	
+}
+
+
+void MyImage::testOpenCv(){
+	
+	unsigned long xd ,yd,xf,yf;
+	
+	FollowOneFaceV3(xd,yd,xf,yf);
+	unsigned long sx = this->GetWidth(); 
+		unsigned long sy = this->GetHeight(); 
+		IplImage* img = cvCreateImage (cvSize ( sy,sx), IPL_DEPTH_8U, 3);
+	
+		unsigned char * tmp = this->GetData();
+		BufferToIplImage(tmp,img);
+		
+		//traitement 
+		  CvScalar p;
+  int x, y, k;
+  
+
+	
+	
+  assert (img->depth == IPL_DEPTH_8U);
+
+  for (y = 0; y < img->height; ++y)
+  {
+    for (x = 0; x < img->width; ++x)
+    {
+      p = cvGet2D (img, y, x);
+      for (k = 0; k < img->nChannels; ++k)
+      {
+        p.val[k] = 255 - p.val[k];
+      }
+      cvSet2D (img, y, x, p);
+    }
+  }
+  
+  //fin du traitement 
+	unsigned char * buf = (unsigned char *) malloc(img->height*img->width*3);
+	IplImageToBuffer(img,buf);
+	this->SetData(buf);
 }

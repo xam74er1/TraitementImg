@@ -9,6 +9,13 @@
 #include <time.h>
 #include <vector> 
 #include <algorithm>
+
+#include <opencv/cv.h>
+#include <opencv/highgui.h>	// one of the OpenCV libraries
+#include "opencv_bridge.h"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
+
 using namespace std;
 class MyImage : public wxImage
 {
@@ -51,7 +58,8 @@ void FollowOneFaceV2(unsigned long &xd, unsigned long &yd,unsigned long &xf, uns
 void FollowOneFaceV2BlackAndWhite(unsigned long &xd, unsigned long &yd,unsigned long &xf, unsigned long &yf ,bool calc = true);
 
 void FollowOneFaceV3(unsigned long &xd, unsigned long &yd,unsigned long &xf, unsigned long &yf ,bool calc = true);
-
+void testOpenCv();
+void testOpenCv2();
 	~MyImage();
 private :
 void permute(unsigned char &a,unsigned char &b);
