@@ -7,7 +7,7 @@
 #include <iostream>
 #include <wx/wx.h>
 #include <time.h>
-#include <vector> 
+#include <vector>
 #include <algorithm>
 
 #include <opencv/cv.h>
@@ -21,7 +21,7 @@ using namespace std;
 class MyImage : public wxImage
 {
 public:
-	
+
 
 MyImage(const wxString& fileName) ;
 MyImage(wxImage image) ;
@@ -65,9 +65,12 @@ void testOpenCv3();
 void BlackAndWhiteResumer();
 void BlackAndWhiteResumerBig();
 void contourVisage();
+void fusionTest(int dilation_size);
+void erodeTest(int dilation_size);
+void matToBuffer(cv::Mat mat, unsigned char * buffer);
 	~MyImage();
 	void matToBuffer(cv::Mat mat, unsigned char * buffer);
-	
+
 	void findRectOfVector(vector<cv::Point> vec,int &maxX ,int &maxY , int &minX , int &minY);
 private :
 void permute(unsigned char &a,unsigned char &b);

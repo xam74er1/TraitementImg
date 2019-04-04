@@ -811,14 +811,14 @@ void MyImage::FollowOneFaceV3(unsigned long& xd, unsigned long& yd, unsigned lon
 void MyImage::testOpenCv2()
 {
     //---------ZONE OPTION -----
-	
+
 	cv::Mat canny_output;
     vector<vector<cv::Point> > contours;
     vector<cv::Vec4i> hierarchy;
-	
+
 	int minX,minY,maxX,maxY;
 
-   
+
     int dilation_type;
     float dilation_size = 17;
     float errode_size = 4;
@@ -853,7 +853,7 @@ void MyImage::testOpenCv2()
 
     cv::Mat element_errode = getStructuringElement(
         dilation_type, cvSize(2 * errode_size + 1, 2 * errode_size + 1), Point(errode_size, errode_size));
-		
+
 		 cv::Mat element_errode_b = getStructuringElement(
         dilation_type, cvSize(2 * errode_size_b + 1, 2 * errode_size_b + 1), Point(errode_size_b, errode_size_b));
 
@@ -875,7 +875,7 @@ void MyImage::testOpenCv2()
     cvtColor(m_mat, src_gray, CV_BGR2GRAY);
     // blur(src_gray, src_gray, cv::Size(10, 10));
 
-    
+
 
     /// Detect edges using canny
     Canny(src_gray, canny_output, thresh, thresh * 2, 3);
@@ -883,27 +883,27 @@ void MyImage::testOpenCv2()
     findContours(canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
     cv::Mat drawing = Mat::zeros(canny_output.size(), CV_8UC3);
-	
+
 
 
     for(int i = 0; i < contours.size(); i++) {
 	 //cv::Scalar color = Scalar(0, rng.uniform(0, 255), rng.uniform(0, 255));
 	cv::Scalar color = Scalar(255, 0, 0);
 	findRectOfVector(contours[i],maxX,maxY,minX,minY);
-	
+
 	cv::Point pt1(minX, minY);
 	cv::Point pt2(maxX, maxY);
-	
+
 	cv::Rect rect(10,10,100,100);
-	
+
 	cv::rectangle(drawing, pt1,pt2, color,10,255,0);
-	
+
 	//cout<<"min X :"<<minX<<" min Y "<<minY<<" max X "<<maxX<<" max Y"<<maxY<<endl;
-	
+
 	drawContours(drawing, contours, i, color, 2, 8, hierarchy, 0, cv::Point());
     }
 
-	
+
 
     cout << "Il y a " << contours.size() << "diferent " << endl;
 
@@ -912,8 +912,8 @@ void MyImage::testOpenCv2()
     matToBuffer(drawing ,buf);
 
     this->SetData(buf, true);
-	
-	
+
+
 
     // on repasse sur limage acutel
 if(true){
@@ -939,32 +939,32 @@ if(true){
 //source : http://answers.opencv.org/question/31515/sorting-contours-from-left-to-right-and-top-to-bottom/
 
 void MyImage::findRectOfVector(vector<Point>  vec,int &maxX ,int &maxY , int &minX , int &minY){
-	
+
 	 maxX = -1;
 	 maxY = -1;
 	 minY = 10000000;
 	 minX = 10000000;
-	
+
 	cv::Point pt;
 	for(int i =0;i<vec.size();i++){
 		pt = vec[i];
-		
+
 		if(pt.x<minX){
 			minX = pt.x;
 		}
-		
+
 		if(pt.x>maxX){
 			maxX = pt.x;
 		}
-		
+
 			if(pt.y<minY){
 			minY = pt.y;
 		}
-		
+
 		if(pt.y>maxY){
 			maxY = pt.y;
 		}
-		
+
 	}
 }
 
@@ -1162,14 +1162,14 @@ void MyImage::matToBuffer(cv::Mat mat, unsigned char* buffer)
 void MyImage::testOpenCv3()
 {
     //---------ZONE OPTION -----
-	
+
 	cv::Mat canny_output;
     vector<vector<cv::Point> > contours;
     vector<cv::Vec4i> hierarchy;
-	
+
 	int minX,minY,maxX,maxY;
 
-   
+
     int thresh = 5;
     int max_thresh = 10;
     int morph_elem = 2;
@@ -1179,7 +1179,7 @@ void MyImage::testOpenCv3()
     int dilation_type = MORPH_ELLIPSE;
     RNG rng(12345);
 
-    
+
     cv::Mat src_gray;
 
     unsigned long xd, yd, xf, yf;
@@ -1190,6 +1190,63 @@ void MyImage::testOpenCv3()
     unsigned long sy = this->GetHeight();
     unsigned char* tmp = this->GetData();
 
+///////////////////////////////////////////////////////////////////////////////
+void MyImage::fusionTest(int dilation_size) {
+	unsigned long xd ,yd,xf,yf;
+
+	//FollowOneFaceV3(xd,yd,xf,yf,false);
+	unsigned long sx = this->GetWidth();
+	unsigned long sy = this->GetHeight();
+	unsigned char * tmp = this->GetData();
+
+	cv::Mat m_mat = cv::Mat(cvSize(sx,sy),CV_8UC3,tmp);
+	cv::Mat dest;
+	int dilation_type;
+	int dilation_elem = 2;
+
+	if( dilation_elem == 0 ){ dilation_type = MORPH_RECT; }
+	else if( dilation_elem == 1 ){ dilation_type = MORPH_CROSS; }
+	else if( dilation_elem == 2) { dilation_type = MORPH_ELLIPSE; }
+
+	cv::Mat element = getStructuringElement( dilation_type,
+                                       cvSize( 2*dilation_size + 1, 2*dilation_size+1 ),
+                                       Point( dilation_size, dilation_size ) );
+  /// Apply the dilation operation
+  dilate(m_mat, m_mat, element);
+
+  //fin du traitement
+
+	this->SetData(m_mat.data,true);
+}
+
+void MyImage::erodeTest(int dilation_size) {
+	unsigned long xd ,yd,xf,yf;
+
+	//FollowOneFaceV3(xd,yd,xf,yf,false);
+	unsigned long sx = this->GetWidth();
+	unsigned long sy = this->GetHeight();
+	unsigned char * tmp = this->GetData();
+
+	cv::Mat m_mat = cv::Mat(cvSize(sx,sy),CV_8UC3,tmp);
+	cv::Mat dest;
+	int dilation_type;
+	int dilation_elem = 2;
+
+	if( dilation_elem == 0 ){ dilation_type = MORPH_RECT; }
+	else if( dilation_elem == 1 ){ dilation_type = MORPH_CROSS; }
+	else if( dilation_elem == 2) { dilation_type = MORPH_ELLIPSE; }
+
+	cv::Mat element = getStructuringElement( dilation_type,
+                                       cvSize( 2*dilation_size + 1, 2*dilation_size+1 ),
+                                       Point( dilation_size, dilation_size ) );
+  /// Apply the dilation operation
+  erode(m_mat, m_mat, element);
+
+  //fin du traitement
+
+	this->SetData(m_mat.data,true);
+}
+///////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -1200,8 +1257,8 @@ void MyImage::testOpenCv3()
 
     cv::Mat element_errode = getStructuringElement(
         dilation_type, cvSize(2 * errode_size + 1, 2 * errode_size + 1), Point(errode_size, errode_size));
-		
-		
+
+
 
 
     /// Apply the dilation operation
@@ -1217,7 +1274,7 @@ void MyImage::testOpenCv3()
     cvtColor(m_mat, src_gray, CV_BGR2GRAY);
     // blur(src_gray, src_gray, cv::Size(10, 10));
 
-    
+
 
     /// Detect edges using canny
     Canny(src_gray, canny_output, thresh, thresh * 2, 3);
@@ -1225,27 +1282,27 @@ void MyImage::testOpenCv3()
     findContours(canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
     cv::Mat drawing = Mat::zeros(canny_output.size(), CV_8UC3);
-	
+
 
 
     for(int i = 0; i < contours.size(); i++) {
 	 //cv::Scalar color = Scalar(0, rng.uniform(0, 255), rng.uniform(0, 255));
 	cv::Scalar color = Scalar(255, 0, 0);
 	findRectOfVector(contours[i],maxX,maxY,minX,minY);
-	
+
 	cv::Point pt1(minX, minY);
 	cv::Point pt2(maxX, maxY);
-	
+
 	cv::Rect rect(10,10,100,100);
-	
+
 	cv::rectangle(drawing, pt1,pt2, color,10,255,0);
-	
+
 	//cout<<"min X :"<<minX<<" min Y "<<minY<<" max X "<<maxX<<" max Y"<<maxY<<endl;
-	
+
 	drawContours(drawing, contours, i, color, 2, 8, hierarchy, 0, cv::Point());
     }
 
-	
+
 
     cout << "Il y a " << contours.size() << "diferent " << endl;
 
@@ -1254,8 +1311,9 @@ void MyImage::testOpenCv3()
     matToBuffer(drawing ,buf);
 
     this->SetData(buf, true);
-	
-	
+
+<<<<<<< HEAD
+
 
     // on repasse sur limage acutel
 if(true){
@@ -1275,4 +1333,34 @@ if(true){
     }
 
 }
+
+  assert (img->depth == IPL_DEPTH_8U);
+
+  for (y = 0; y < img->height; ++y)
+  {
+    for (x = 0; x < img->width; ++x)
+    {
+      p = cvGet2D (img, y, x);
+      for (k = 0; k < img->nChannels; ++k)
+      {
+        p.val[k] = 255 - p.val[k];
+      }
+      cvSet2D (img, y, x, p);
+    }
+  }
+
+  //fin du traitement
+	unsigned char * buf = (unsigned char *) malloc(img->height*img->width*3);
+	IplImageToBuffer(img,buf);
+	this->SetData(buf);
+}
+
+void MyImage::matToBuffer(cv::Mat mat, unsigned char * buffer) {
+	int rowSize = mat.step;
+	unsigned char * rowAddress = mat.data;
+	for ( int y = 0; y < mat.rows; y++) {
+		memcpy(buffer + y * rowSize, rowAddress, rowSize);
+		rowAddress += mat.step;
+	}
+
 }

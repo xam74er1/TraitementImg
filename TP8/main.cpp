@@ -26,8 +26,8 @@
 #endif
 wxDEFINE_EVENT(MON_EVENEMENT, wxCommandEvent);
 
-wxDECLARE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ;  
-wxDEFINE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ; 
+wxDECLARE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ;
+wxDEFINE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ;
 
 using namespace std;
 
@@ -72,18 +72,22 @@ public:
 	void ouvertureOpenCV();
 	void ConvertireToWxWiget();
 	void setSeuil();
+	void setSize();
 	void seuillvl(wxCommandEvent& event);
-	
-	bool run = true;
+	void sizelvl(wxCommandEvent& event);
+	void fusion();
+	void erode();
+  bool run = true;
 
 private:
     wxBitmap m_bitmap; // used to display the image
     MyImage* m_image;  // used to load and process the image
-	 MyImage* img_save;  // used to load and process the image
+	MyImage* img_save;  // used to load and process the image
     int m_whith;
     int m_height;
     MyThread* m_theread;
     int m_seuil = 0;
+	int m_size = 0;
 
     unsigned long xd, yd, xf, yf;
     bool drawRect = false;
@@ -94,7 +98,7 @@ MyPanel::MyPanel(wxWindow* parent, MyThread* thread)
     : wxPanel(parent)
     , m_theread(thread)
 {
-	
+
 }
 
 void MyPanel::addCounter()
@@ -138,7 +142,7 @@ void MyPanel::OnPaint(wxPaintEvent& WXUNUSED(event))
 	dc.SetPen(wxPen(wxColor(255, 0, 0), 5)); // 10-pixels-thick pink outline
 	dc.DrawRectangle(xd, yd, (xf - xd), (yf - yd));
 	drawRect = false;
-	
+
 	}
 
 	if(m_image) {
@@ -274,8 +278,6 @@ void MyPanel::OnThresholdImage(wxCommandEvent& event)
     Refresh();
 }
 
-
-
 void MyPanel::Lunina()
 {
     Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
@@ -346,20 +348,20 @@ void MyPanel::enhenceContrast()
 
 void MyPanel::drawImage(MyImage *data,int id ){
 	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-	
+
 	//if(!m_image){
-		
+
 	//}
-	
+
 	if(run){
 	m_image = data;
-	
+
 	int  m_height = m_image->GetHeight();
    int m_whith = m_image->GetWidth();
     GetParent()->SetSize(m_whith, m_height + 10);
 
     this->SetSize(m_whith, m_height);
-	
+
 	if(id!=-1){
 		aplyEffect(id);
 	}else{
@@ -377,8 +379,8 @@ void MyPanel::test()
     int mouseY = pt.y - this->GetScreenPosition().y;
 
     if(m_image) {
-		
-		
+
+
 		m_image->testOpenCv2();
 		//m_image->contourVisage();
 
@@ -389,41 +391,41 @@ void MyPanel::test()
 
 void MyPanel::Face2(){
 	  Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-	  
+
 
 		drawRect = true;
-	
+
     if(m_image) {
 
 	m_image->FollowOneFaceV2(xd,yd,xf,yf);
-	
+
 	//cout<<" xd "<<xd<<" yd "<<yd<<endl;
-	
+
 	Refresh();
 
-	
-	
+
+
     }
 }
 
 void MyPanel::Face2BW(){
 	  Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-	  
+
 
 		drawRect = true;
 		bool direct = false;
 		bool needFind = (counter%10==0)||direct;
 
-		
-	
+
+
     if(m_image) {
 
 	m_image->FollowOneFaceV2BlackAndWhite(xd,yd,xf,yf,needFind);
-	
+
 	//cout<<" xd "<<xd<<" yd "<<yd<<endl;
-	
+
 	Refresh();
-	
+
     }
 }
 
@@ -431,6 +433,12 @@ void MyPanel::Face2BW(){
 void MyPanel::seuillvl(wxCommandEvent& event)
 {
     m_seuil = event.GetInt();
+    // std::cout << m_seil << std::endl;
+}
+
+void MyPanel::sizelvl(wxCommandEvent& event)
+{
+    m_size = event.GetInt();
     // std::cout << m_seil << std::endl;
 }
 
@@ -446,6 +454,33 @@ void MyPanel::setSeuil()
     }
 }
 
+void MyPanel::setSize()
+{
+    Bind(MON_EVENEMENT, &MyPanel::sizelvl, this);
+
+	MyThresholdDialog* dlg = new MyThresholdDialog(this, -1, wxT("Threshold"), wxDefaultPosition, wxSize(250, 140), wxDEFAULT_DIALOG_STYLE ,0 , 10 , m_size);
+    int res = dlg->ShowModal();
+}
+
+void MyPanel::fusion() {
+	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
+
+    if(m_image) {
+		int size = m_size;
+		m_image->fusionTest(size);
+		Refresh();
+    }
+}
+
+void MyPanel::erode() {
+	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
+
+    if(m_image) {
+		int size = m_size;
+		m_image->erodeTest(size);
+		Refresh();
+    }
+}
 
 
 class MyFrame;
@@ -455,6 +490,7 @@ class MyThread : public wxThread
 {
 public:
     MyThread(MyFrame* frame);
+	void getCurrentFrame();
 
 private:
     MyFrame* m_frame;
@@ -521,7 +557,10 @@ enum { // énumération. Elle gère la numérotation automatiquement
     ID_FACE2,
     ID_FACE2BW,
     ID_SETSEUIL,
-    ID_ONOFFCAM
+	ID_SETSIZE,
+    ID_ONOFFCAM,
+	ID_FUSION,
+	ID_ERODE
 };
 IMPLEMENT_APP(MyApp);
 
@@ -536,7 +575,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame(NULL, wxID_ANY, title, pos, size)
 {
 
-    
+
 
     wxMenu* menuFile = new wxMenu;
     menuFile->Append(ID_Hello, wxT("Hello...\tCtrl-H"), _T("Show about dialog"));
@@ -628,19 +667,36 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     menuProcesse->Append(ID_FACE2BW, wxT("Face Detection black and white ..\tCtrl-FBW"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_FACE2BW);
+<<<<<<< HEAD
 
     menuProcesse->Append(ID_SETSEUIL, wxT("Curseur Threshold ..\tCtrl-FBW"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SETSEUIL);
 	menuProcesse->AppendSeparator();
-	
+
 	    menuProcesse->Append(ID_TEST, wxT("test ..\tCtrl-T"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_TEST);
-	
+
+=======
+
+	menuProcesse->Append(ID_FUSION, wxT("Fusion ..\tCtrl-FBW"));
+    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_FUSION);
+
+	menuProcesse->Append(ID_ERODE, wxT("Erode ..\tCtrl-FBW"));
+    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_ERODE);
+>>>>>>> ed30bea80f28f790172f66dcceaccf877bbb6cbc
 
     wxMenu* menuCalcule = new wxMenu;
 
     menuCalcule->Append(ID_HISTOGRAMCOUNT, wxT("Historgrame...\tCtrl-H"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_HISTOGRAMCOUNT);
+
+	wxMenu* menuCursors = new wxMenu;
+
+	menuCursors->Append(ID_SETSEUIL, wxT("Curseur Threshold ..\tCtrl-FBW"));
+    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SETSEUIL);
+
+	menuCursors->Append(ID_SETSIZE, wxT("Curseur size ..\tCtrl-FBW"));
+    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SETSIZE);
 
     wxMenuBar* menuBar = new wxMenuBar;
     menuBar->Append(menuFile, wxT("File"));
@@ -649,6 +705,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuBar->Append(menuImage, wxT("Image"));
     menuBar->Append(menuProcesse, wxT("Processe"));
 	menuBar->Append(menuCalcule, wxT("Calcule"));
+	menuBar->Append(menuCursors, wxT("Cursors"));
 
     SetMenuBar(menuBar);
 
@@ -664,7 +721,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	m_thread = new MyThread(this) ;
 	m_thread->Create();
 	m_thread->Run();
-	
+
 	m_panel = new MyPanel(this,m_thread);
 }
 void MyFrame::OnHello(wxCommandEvent& event)
@@ -738,10 +795,12 @@ void MyFrame::OnSave(wxCommandEvent& event)
 void MyFrame::OnProcessImage(wxCommandEvent& event)
 {
     if(event.GetId() == ID_SETSEUIL) {
-	m_panel->setSeuil();
+		m_panel->setSeuil();
     } else if(event.GetId() == ID_ONOFFCAM) {
-	OnOffCam();
-    } else {
+		OnOffCam();
+    } else if (event.GetId() == ID_SETSIZE){
+		m_panel->setSize();
+	} else {
 	id = event.GetId();
     }
     //    switch(event.GetId()) {
@@ -804,11 +863,15 @@ void MyFrame::OnSetCounter(wxCommandEvent& event)
 void MyFrame::OnOffCam()
 {
     if(onoffStatus == true) {
-	m_thread->Pause();
-	onoffStatus = false; //
+		// Recuperer frame en cours et draw()
+		// frame -> image
+
+
+		m_thread->Pause();
+		onoffStatus = false;
     } else if(onoffStatus == false) {
-	m_thread->Resume();
-	onoffStatus = true;
+		m_thread->Resume();
+		onoffStatus = true;
     }
 }
 
@@ -846,6 +909,11 @@ void* MyThread::Entry()
 	wxQueueEvent(m_frame, evt); // envoie l'événement
     }
     return NULL; // the thread is finished in a clean way
+}
+
+MyImage getCurrentFrame() { // en cours
+	// set variable MyImage dans m_panel
+	// m_image = new MyImage(fileName);
 }
 
 void MyPanel::aplyEffect(int id)
@@ -900,6 +968,15 @@ void MyPanel::aplyEffect(int id)
     case ID_FACE2BW:
 	Face2BW();
 	break;
-	
+<<<<<<< HEAD
+
+=======
+	case ID_FUSION:
+	fusion();
+	break;
+	case ID_ERODE:
+	erode();
+	break;
+>>>>>>> ed30bea80f28f790172f66dcceaccf877bbb6cbc
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="TP8" Database="" Version="10.0.0">
+  <Project Name="TP8" Path="TP8.project" Active="No"/>
+  <Project Name="tp5" Path="../tp5/tp5.project" Active="No"/>
+  <Project Name="projet" Path="projet/projet.project" Active="Yes"/>
+  <Project Name="TP2" Path="../../../Lucas/TP2/TP2.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Environment/>
+      <Project Name="TP8" ConfigName="Debug"/>
+      <Project Name="tp5" ConfigName="Debug"/>
+      <Project Name="projet" ConfigName="Debug"/>
+      <Project Name="TP2" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Environment/>
+      <Project Name="TP8" ConfigName="Debug"/>
+      <Project Name="tp5" ConfigName="Release"/>
+      <Project Name="projet" ConfigName="Release"/>
+      <Project Name="TP2" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>
