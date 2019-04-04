@@ -73,6 +73,8 @@ public:
 	void ConvertireToWxWiget();
 	void setSeuil();
 	void seuillvl(wxCommandEvent& event);
+	
+	bool run = true;
 
 private:
     wxBitmap m_bitmap; // used to display the image
@@ -349,6 +351,7 @@ void MyPanel::drawImage(MyImage *data,int id ){
 		
 	//}
 	
+	if(run){
 	m_image = data;
 	
 	int  m_height = m_image->GetHeight();
@@ -362,7 +365,7 @@ void MyPanel::drawImage(MyImage *data,int id ){
 	}else{
 		Refresh();
 	}
-	
+	}
 }
 
 void MyPanel::test()
@@ -375,7 +378,10 @@ void MyPanel::test()
 
     if(m_image) {
 		
+		
 		m_image->testOpenCv2();
+		//m_image->contourVisage();
+
 
 	Refresh();
     }
@@ -625,6 +631,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     menuProcesse->Append(ID_SETSEUIL, wxT("Curseur Threshold ..\tCtrl-FBW"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SETSEUIL);
+	menuProcesse->AppendSeparator();
+	
+	    menuProcesse->Append(ID_TEST, wxT("test ..\tCtrl-T"));
+    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_TEST);
+	
 
     wxMenu* menuCalcule = new wxMenu;
 
@@ -889,5 +900,6 @@ void MyPanel::aplyEffect(int id)
     case ID_FACE2BW:
 	Face2BW();
 	break;
+	
     }
 }
