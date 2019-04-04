@@ -94,7 +94,7 @@ private:
 };
 
 MyPanel::MyPanel(wxWindow* parent, MyThread* thread)
-    : wxPanel(parent)
+    : wxPanel(parent, wxID_ANY, wxPoint(200, 0))
     , m_theread(thread)
 {
 	
@@ -115,7 +115,7 @@ void MyPanel::OpenImage(wxString fileName)
 
     m_height = m_image->GetHeight();
     m_whith = m_image->GetWidth();
-    GetParent()->SetSize(m_whith, m_height + 10);
+    GetParent()->SetSize(m_whith + 200, m_height + 10);
 
     this->SetSize(m_whith, m_height);
     Refresh();
@@ -254,7 +254,6 @@ void MyPanel::Seil(int seuil)
 {
     Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
     std::cout << m_seuil << std::endl;
-
     if(m_image) {
 	// MyThresholdDialog* dlg = new MyThresholdDialog(this, -1, wxT("Threshold"), wxDefaultPosition, wxSize(250,
 	// 140));
@@ -453,7 +452,7 @@ void MyPanel::setSize()
 {
     Bind(MON_EVENEMENT, &MyPanel::sizelvl, this);
 
-	MyThresholdDialog* dlg = new MyThresholdDialog(this, -1, wxT("Threshold"), wxDefaultPosition, wxSize(250, 140), wxDEFAULT_DIALOG_STYLE ,0 , 10 , m_size);
+	MyThresholdDialog* dlg = new MyThresholdDialog(this, -1, wxT("Size"), wxDefaultPosition, wxSize(250, 140), wxDEFAULT_DIALOG_STYLE ,0 , 10 , m_size);
     int res = dlg->ShowModal();
 }
 
@@ -519,13 +518,11 @@ private:
     void OnOffCam();
 
     MyPanel* m_panel; // the panel inside the main frame
+	wxPanel * m_sidebar; // sidebar panel
     MyThread* m_thread;
     int id = -1;
     bool onoffStatus = false;
 };
-
-
-
 
 enum { // énumération. Elle gère la numérotation automatiquement
     ID_Hello = 1,
@@ -562,6 +559,7 @@ IMPLEMENT_APP(MyApp);
 bool MyApp::OnInit()
 {
     MyFrame* frame = new MyFrame(wxT("Hello World"), wxPoint(50, 50), wxSize(450, 340));
+	
     frame->Show(true);
     wxInitAllImageHandlers();
     return true;
@@ -569,8 +567,6 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame(NULL, wxID_ANY, title, pos, size)
 {
-
-    
 
     wxMenu* menuFile = new wxMenu;
     menuFile->Append(ID_Hello, wxT("Hello...\tCtrl-H"), _T("Show about dialog"));
@@ -701,12 +697,27 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     this->CenterOnScreen();
 
     //-------Theread------
-	Bind(MY_THREAD_EVENT, &MyFrame::OnSetCounter, this) ;
-	m_thread = new MyThread(this) ;
+	Bind(MY_THREAD_EVENT, &MyFrame::OnSetCounter, this);
+	m_thread = new MyThread(this);
 	m_thread->Create();
-	m_thread->Run();
-	
-	m_panel = new MyPanel(this,m_thread);
+	CvCapture* capture = cvCreateCameraCapture(-1); //-1 or whatever number works for you
+	if (capture) //camera is connected
+	{
+		m_thread->Run();
+	}
+	else
+	{
+		cout << "BIEN" << endl;
+	}
+
+	m_sidebar = new wxPanel(this, wxID_ANY, wxPoint(0,0), wxSize(200,100));
+	wxStaticText *threshold_text = new wxStaticText(m_sidebar, wxID_ANY, wxString("Threshold cursor"), wxPoint(20,10), wxSize(160,10));
+	wxSlider *slider_threshold = new wxSlider(m_sidebar, wxID_ANY, 0, 0, 255, wxPoint(20,20), wxSize(160,50),wxSL_HORIZONTAL);
+	wxStaticText *size_text = new wxStaticText(m_sidebar, wxID_ANY, wxString("Size cursor"), wxPoint(20,60), wxSize(160,20));
+	wxSlider *slider_size = new wxSlider(m_sidebar, wxID_ANY, 0, 0, 255, wxPoint(20,40), wxSize(160,100),wxSL_HORIZONTAL);
+	m_panel = new MyPanel(this, m_thread);
+	// slider_threshold->GetValue(); // Mettre la bonne valeur
+	// slider_size->GetValue();
 }
 void MyFrame::OnHello(wxCommandEvent& event)
 {
@@ -867,7 +878,7 @@ MyThread::MyThread(MyFrame* frame)
 {
     capture = cvCaptureFromCAM(0); // initialize default camera
     if(!capture) {
-	fprintf(stderr, "Cannot initialize webcam!\n");
+		fprintf(stderr, "Cannot initialize webcam!\n");
     }
 }
 
