@@ -26,8 +26,8 @@
 #endif
 wxDEFINE_EVENT(MON_EVENEMENT, wxCommandEvent);
 
-wxDECLARE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ;  
-wxDEFINE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ; 
+wxDECLARE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ;
+wxDEFINE_EVENT(MY_THREAD_EVENT, wxCommandEvent) ;
 
 using namespace std;
 
@@ -77,6 +77,7 @@ public:
 	void sizelvl(wxCommandEvent& event);
 	void fusion();
 	void erode();
+  bool run = true;
 
 private:
     wxBitmap m_bitmap; // used to display the image
@@ -97,7 +98,7 @@ MyPanel::MyPanel(wxWindow* parent, MyThread* thread)
     : wxPanel(parent, wxID_ANY, wxPoint(200, 0))
     , m_theread(thread)
 {
-	
+
 }
 
 void MyPanel::addCounter()
@@ -141,7 +142,7 @@ void MyPanel::OnPaint(wxPaintEvent& WXUNUSED(event))
 	dc.SetPen(wxPen(wxColor(255, 0, 0), 5)); // 10-pixels-thick pink outline
 	dc.DrawRectangle(xd, yd, (xf - xd), (yf - yd));
 	drawRect = false;
-	
+
 	}
 
 	if(m_image) {
@@ -346,25 +347,26 @@ void MyPanel::enhenceContrast()
 
 void MyPanel::drawImage(MyImage *data,int id ){
 	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-	
+
 	//if(!m_image){
-		
+
 	//}
-	
+
+	if(run){
 	m_image = data;
-	
+
 	int  m_height = m_image->GetHeight();
    int m_whith = m_image->GetWidth();
     GetParent()->SetSize(m_whith, m_height + 10);
 
     this->SetSize(m_whith, m_height);
-	
+
 	if(id!=-1){
 		aplyEffect(id);
 	}else{
 		Refresh();
 	}
-	
+	}
 }
 
 void MyPanel::test()
@@ -376,8 +378,11 @@ void MyPanel::test()
     int mouseY = pt.y - this->GetScreenPosition().y;
 
     if(m_image) {
-		
+
+
 		m_image->testOpenCv2();
+		//m_image->contourVisage();
+
 
 	Refresh();
     }
@@ -385,41 +390,41 @@ void MyPanel::test()
 
 void MyPanel::Face2(){
 	  Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-	  
+
 
 		drawRect = true;
-	
+
     if(m_image) {
 
 	m_image->FollowOneFaceV2(xd,yd,xf,yf);
-	
+
 	//cout<<" xd "<<xd<<" yd "<<yd<<endl;
-	
+
 	Refresh();
 
-	
-	
+
+
     }
 }
 
 void MyPanel::Face2BW(){
 	  Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-	  
+
 
 		drawRect = true;
 		bool direct = false;
 		bool needFind = (counter%10==0)||direct;
 
-		
-	
+
+
     if(m_image) {
 
 	m_image->FollowOneFaceV2BlackAndWhite(xd,yd,xf,yf,needFind);
-	
+
 	//cout<<" xd "<<xd<<" yd "<<yd<<endl;
-	
+
 	Refresh();
-	
+
     }
 }
 
@@ -568,6 +573,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame(NULL, wxID_ANY, title, pos, size)
 {
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 28a32409ca16854a43a7eef8ecf24b5fce1e794a
     wxMenu* menuFile = new wxMenu;
     menuFile->Append(ID_Hello, wxT("Hello...\tCtrl-H"), _T("Show about dialog"));
     Bind(wxEVT_MENU, &MyFrame::OnHello, this, ID_Hello);
@@ -658,23 +668,34 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     menuProcesse->Append(ID_FACE2BW, wxT("Face Detection black and white ..\tCtrl-FBW"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_FACE2BW);
-	
+<<<<<<< HEAD
+
+    menuProcesse->Append(ID_SETSEUIL, wxT("Curseur Threshold ..\tCtrl-FBW"));
+    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SETSEUIL);
+	menuProcesse->AppendSeparator();
+
+	    menuProcesse->Append(ID_TEST, wxT("test ..\tCtrl-T"));
+    Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_TEST);
+
+=======
+
 	menuProcesse->Append(ID_FUSION, wxT("Fusion ..\tCtrl-FBW"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_FUSION);
-	
+
 	menuProcesse->Append(ID_ERODE, wxT("Erode ..\tCtrl-FBW"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_ERODE);
+>>>>>>> ed30bea80f28f790172f66dcceaccf877bbb6cbc
 
     wxMenu* menuCalcule = new wxMenu;
 
     menuCalcule->Append(ID_HISTOGRAMCOUNT, wxT("Historgrame...\tCtrl-H"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_HISTOGRAMCOUNT);
-	
+
 	wxMenu* menuCursors = new wxMenu;
-	
+
 	menuCursors->Append(ID_SETSEUIL, wxT("Curseur Threshold ..\tCtrl-FBW"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SETSEUIL);
-	
+
 	menuCursors->Append(ID_SETSIZE, wxT("Curseur size ..\tCtrl-FBW"));
     Bind(wxEVT_MENU, &MyFrame::OnProcessImage, this, ID_SETSIZE);
 
@@ -700,6 +721,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	Bind(MY_THREAD_EVENT, &MyFrame::OnSetCounter, this);
 	m_thread = new MyThread(this);
 	m_thread->Create();
+<<<<<<< HEAD
 	CvCapture* capture = cvCreateCameraCapture(-1); //-1 or whatever number works for you
 	if (capture) //camera is connected
 	{
@@ -718,6 +740,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	m_panel = new MyPanel(this, m_thread);
 	// slider_threshold->GetValue(); // Mettre la bonne valeur
 	// slider_size->GetValue();
+=======
+	m_thread->Run();
+
+	m_panel = new MyPanel(this,m_thread);
+>>>>>>> 28a32409ca16854a43a7eef8ecf24b5fce1e794a
 }
 void MyFrame::OnHello(wxCommandEvent& event)
 {
@@ -860,8 +887,8 @@ void MyFrame::OnOffCam()
     if(onoffStatus == true) {
 		// Recuperer frame en cours et draw()
 		// frame -> image
-		
-		
+
+
 		m_thread->Pause();
 		onoffStatus = false;
     } else if(onoffStatus == false) {
@@ -963,11 +990,15 @@ void MyPanel::aplyEffect(int id)
     case ID_FACE2BW:
 	Face2BW();
 	break;
+<<<<<<< HEAD
+
+=======
 	case ID_FUSION:
 	fusion();
 	break;
 	case ID_ERODE:
 	erode();
 	break;
+>>>>>>> ed30bea80f28f790172f66dcceaccf877bbb6cbc
     }
 }
